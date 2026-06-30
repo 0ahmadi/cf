@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-cf — Codeforces helper for competitive programmers
+cf — Codeforces helper
 Usage:
   cf <problem>        e.g. cf 282/A or cf 282A
                       fetches examples, scaffolds solution.cpp, opens vim
@@ -34,7 +34,6 @@ int main() {
         return 0;
 }
 """
-
 
 def die(msg):
     print(f"{RED}error:{RESET} {msg}", file=sys.stderr)
@@ -97,11 +96,13 @@ def fetch_examples(contest, index):
     except Exception as e:
         die(f"Could not fetch problem page: {e}")
 
+    import html as _html
+
     def clean(s):
+        s = re.sub(r'</div>\s*<div[^>]*test-example-line[^>]*>', '\n', s)
         s = re.sub(r'<br\s*/?>', '\n', s, flags=re.I)
         s = re.sub(r'<[^>]+>', '', s)
         return _html.unescape(s).strip()
-
 
     inputs, outputs = [], []
 
@@ -147,6 +148,7 @@ def copy_to_clipboard(text):
             except Exception:
                 pass
     return None
+
 
 
 def cmd_fetch(arg):
@@ -270,6 +272,7 @@ def cmd_add(n):
     out_f.write_text(out if out.endswith("\n") else out + "\n")
 
     print(f"{GREEN}saved{RESET} test {n}  ({in_f}, {out_f})")
+
 
 
 def main():
