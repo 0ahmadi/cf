@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-cf — Codeforces helper
+cf — Codeforces helper for competitive programmers
 Usage:
   cf <problem>        e.g. cf 282/A or cf 282A
                       fetches examples, scaffolds solution.cpp, opens vim
@@ -15,12 +15,14 @@ import subprocess
 import shutil
 from pathlib import Path
 
+
 GREEN  = "\033[92m"
 RED    = "\033[91m"
 YELLOW = "\033[93m"
 CYAN   = "\033[96m"
 BOLD   = "\033[1m"
 RESET  = "\033[0m"
+
 
 CPP_TEMPLATE = """\
 #include <bits/stdc++.h>
@@ -34,6 +36,7 @@ int main() {
         return 0;
 }
 """
+
 
 def die(msg):
     print(f"{RED}error:{RESET} {msg}", file=sys.stderr)
@@ -179,7 +182,10 @@ def cmd_test():
             os.chdir(candidates[0].parent)
             sol = Path("solution.cpp")
         elif len(candidates) > 1:
-            die("Multiple solution.cpp found — cd into the problem folder first.")
+            latest = max(candidates, key=lambda p: p.stat().st_mtime)
+            os.chdir(latest.parent)
+            sol = Path("solution.cpp")
+            print(f"{CYAN}testing{RESET} {latest.parent}/")
         else:
             die("No solution.cpp found. Run `cf <problem>` first or cd into the folder.")
 
@@ -272,7 +278,6 @@ def cmd_add(n):
     out_f.write_text(out if out.endswith("\n") else out + "\n")
 
     print(f"{GREEN}saved{RESET} test {n}  ({in_f}, {out_f})")
-
 
 
 def main():
