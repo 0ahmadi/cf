@@ -4,7 +4,7 @@
 ## Setup
  
 ```bash
-git clone https://github.com/dwrrio/cf.git
+git clone https://github.com/0ahmadi/cf.git
 cd cf
 chmod +x cf
 sudo mv cf /usr/local/bin/cf
